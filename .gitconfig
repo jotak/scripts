@@ -1,0 +1,15 @@
+[user]
+	name = Joel Takvorian
+	email = joel.takvorian@qaraywa.net
+[color]
+	ui = auto
+[alias]
+	br = branch
+	co = checkout
+	lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+	st = status
+	rst = reset --hard
+[merge]
+	tool = meld
+[mergetool]
+	keepbackup = false
