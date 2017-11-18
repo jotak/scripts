@@ -13,7 +13,7 @@ alias ll='ls -al --color=auto'
 alias git='LANG=en_GB git'
 alias hgrep='history | grep'
 
-source /usr/share/doc/git-core-doc/contrib/completion/git-completion.bash
+source /usr/share/bash-completion/completions/git
 source /usr/share/git-core/contrib/completion/git-prompt.sh
 
 export GIT_PS1_SHOWDIRTYSTATE=true
