@@ -17,8 +17,11 @@ if [[ "$#" -gt 1 ]]; then
   REMOTE="$2"
 fi
 
+IFS='#'
+URL=( $1 )
+
 IFS='/'
-PARTS=( $1 )
+PARTS=( ${URL[0]} )
 
 ID="${PARTS[6]}"
 BRANCHNAME="pr-$ID"
