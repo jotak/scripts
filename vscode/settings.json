@@ -1,0 +1,15 @@
+// Placez vos paramètres dans ce fichier pour remplacer les paramètres par défaut
+{
+    // "editor.fontFamily": "'Fantasque Sans Mono', 'DejaVu Sans Mono'",
+    "editor.fontFamily": "'DejaVu Sans Mono'",
+    "editor.tabSize": 2,
+    "typescript.updateImportsOnFileMove.enabled": "always",
+    "breadcrumbs.enabled": true,
+    "cSpell.userWords": [
+        "m'expliquez"
+    ],
+    "workbench.colorCustomizations": {
+        "editor.lineHighlightBackground": "#393740"
+    },
+    "cSpell.enabled": false
+}
