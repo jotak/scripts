@@ -28,12 +28,18 @@ done
 
 for k in `git branch $BR_OPTS | sed s/^..// | sed s/-\>.*//`
 do
+	CHECK_MASTER=""
+	DESC=`git log -1 --pretty=format:"%s" $k`
+	ok=`git log --pretty=oneline --abbrev-commit master | grep "$DESC"`
+	if [[ "$ok" == "" ]]; then
+		CHECK_MASTER=" *"
+	fi
 	if [[ "$TO_GREP" == "" ]]; then
-		git log -1 --pretty=format:"$k: %C(blue)%s %Cgreen(%cr)%Creset" $k --
+		git log -1 --pretty=format:"$k: %C(blue)%s %Cgreen(%cr)%C(yellow)$CHECK_MASTER%Creset" $k --
 	else
 		ok=`git log -1 --pretty=format:"$k: %C(blue)%s %Cgreen(%cr)%Creset" $k -- | grep "$TO_GREP"`
 		if [[ "$ok" != "" ]]; then
-			git log -1 --pretty=format:"$k: %C(blue)%s %Cgreen(%cr)%Creset" $k --
+			git log -1 --pretty=format:"$k: %C(blue)%s %Cgreen(%cr)%C(yellow)$CHECK_MASTER%Creset" $k --
 		fi
 	fi
 done
