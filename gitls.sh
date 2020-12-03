@@ -1,5 +1,12 @@
 #!/bin/bash
 
+echo "!!!"
+echo "DEPRECATED, use \`git wip\` instead!"
+echo "alias wip: for-each-ref --sort='authordate:iso8601' --format=' %(color:green)%(authordate:relative)%09%(color:white)%(refname:short): %(color:blue)%(contents:subject)' refs/heads"
+echo "!!!"
+echo ""
+echo ""
+
 if [[ "$1" = "-h" || "$1" = "help" || "$1" = "--help" ]]; then
 	echo "Syntax: gitls [-a | -g=<str>]"
 	echo ""

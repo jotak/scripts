@@ -9,7 +9,11 @@
 	lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
 	st = status
 	rst = reset --hard
+	wip = for-each-ref --sort='authordate:iso8601' --format=' %(color:green)%(authordate:relative)%09%(color:white)%(refname:short): %(color:blue)%(contents:subject)' refs/heads
+	ls = wip
 [merge]
 	tool = meld
 [mergetool]
 	keepbackup = false
+[core]
+	editor = vim
