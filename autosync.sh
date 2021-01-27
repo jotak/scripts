@@ -10,5 +10,7 @@ if [[ "$#" -lt 1 || "$1" = "--help" ]]; then
 fi
 
 cd "$1"
-git add -A && git commit -m "autocommit"
-git fetch && git rebase origin/master && git push origin HEAD:master
+if [ $? -eq 0 ]; then
+	git add -A && git commit -m "autocommit"
+	git fetch && git rebase origin/master && git push origin HEAD:master
+fi
