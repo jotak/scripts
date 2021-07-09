@@ -15,8 +15,6 @@ ALLGOOD=1
 for host in $HOSTS; do
 	# Skip cloud.openshift.com, for some reason it seems always invalid but is unused anyway
 	if [ $host != "cloud.openshift.com" ]; then
-		auth=`cat $FILE | jq -r '.auths["'$host'"].auth'`
-		email=`cat $FILE | jq -r '.auths["'$host'"].email'`
 		echo "podman login $host"
 		podman login $host --authfile $FILE < /dev/null
 		if [ $? -ne 0 ]; then
@@ -30,6 +28,9 @@ done
 
 if [ $ALLGOOD -eq 0 ]; then
 	echo ""
-	echo "Invalid or expired secrets, there was at least one error."
+	echo "❌ Invalid or expired secrets, there was at least one error."
 	exit 1
 fi
+
+echo ""
+echo "✅ Everything looks good."
