@@ -12,18 +12,19 @@ FILE="$1"
 HOSTS=`cat $FILE | jq -r  '.auths | keys[]'`
 ALLGOOD=1
 
-
-
 for host in $HOSTS; do
-	auth=`cat $FILE | jq -r '.auths["'$host'"].auth'`
-	email=`cat $FILE | jq -r '.auths["'$host'"].email'`
-	echo "podman login $host"
-	podman login $host --authfile $FILE
-	if [ $? -ne 0 ]; then
-	  ALLGOOD=0
-		echo "❌"
-	else
-		echo "✅"
+	# Skip cloud.openshift.com, for some reason it seems always invalid but is unused anyway
+	if [ $host != "cloud.openshift.com" ]; then
+		auth=`cat $FILE | jq -r '.auths["'$host'"].auth'`
+		email=`cat $FILE | jq -r '.auths["'$host'"].email'`
+		echo "podman login $host"
+		podman login $host --authfile $FILE < /dev/null
+		if [ $? -ne 0 ]; then
+			ALLGOOD=0
+			echo "❌"
+		else
+			echo "✅"
+		fi
 	fi
 done
 
