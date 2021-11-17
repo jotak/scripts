@@ -14,6 +14,12 @@ if [[ "$OSDIR" == "" ]]; then
 	OSDIR="$1"
 fi
 
+echo "*** WITH EXISTING CONFIG ***"
+echo "mkdir $OSDIR && cp ./install-config.yaml.keep $OSDIR/install-config.yaml"
+echo "sed -i 's/name: jtakvori-.*/name: jtakvori-$OSDIR/' ./$OSDIR/install-config.yaml"
+echo "./openshift-install --dir $OSDIR create cluster"
+echo ""
+echo "******* FROM SCRATCH *******"
 echo "./openshift-install --dir $OSDIR_OLD destroy cluster"
 echo "rm -rf $OSDIR_OLD"
 echo "wl-copy < ../pull-secret.json"

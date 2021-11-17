@@ -22,7 +22,7 @@ ID=`echo $BRANCH | cut -d '-' -f2`
 case $ID in
     ''|*[!0-9]*) echo "Looks like I'm not on an already fetched PR. Please change branch first." ;;
     *) git reset --hard HEAD && \
-			git checkout master && \
+			(git checkout master || git checkout main) && \
 			git branch -D $BRANCH && \
 			git fetch $REMOTE pull/$ID/head:$BRANCH && \
 			git checkout $BRANCH ;;
