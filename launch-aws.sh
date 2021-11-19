@@ -8,7 +8,7 @@ show_help()
    echo "Start OpenShift on AWS. The script must run from an OpenShift directory (ie. with openshift-install)"
    echo
    echo "Syntax: launch-aws [-s|p|d|c|h]"
-   echo "options:"
+   echo "Options:"
    echo "s     Skip secrets verification."
    echo "p     Prepare config without starting cluster."
    echo "d     Destroy last created cluster and exit."
@@ -55,6 +55,11 @@ if [ "$#" != "0" ]; then
 	exit 1
 fi
 
+if [ ! -f openshift-install ]; then
+	echo "The script must run from an OpenShift directory (ie. with openshift-install)"
+	exit 1
+fi
+
 today=`LC_ALL=en_US.utf8 date +"%b%d" | awk '{print tolower($0)}'`
 inc=0
 
@@ -64,9 +69,6 @@ if [ -f .lastdir ]; then
 		if [ "$destroy" == "1" ]; then
 			./openshift-install --dir "$lastdir" destroy cluster
 			rm -rf "$lastdir"
-			if [ "$exit_after_destroy" == "1" ]; then
-				exit 0
-			fi
 		else
 			echo "❗❗ Previous directory '$lastdir' still exists. ❗❗ You should make sure the cluster was destroyed by running:"
 			echo "./openshift-install --dir $lastdir destroy cluster && rm -rf $lastdir || rm -rf $lastdir"
@@ -78,6 +80,10 @@ if [ -f .lastdir ]; then
 	if [[ ${parts[0]} == $today ]]; then
 		inc=$((${parts[1]} + 1))
 	fi
+fi
+
+if [ "$exit_after_destroy" == "1" ]; then
+	exit 0
 fi
 
 instdir="$today-$inc"
@@ -133,4 +139,4 @@ if [ $? -ne 0 ]; then
 		exit 1
 fi
 
-oc login https://api.jtakvori-$instdir.devcluster.openshift.com:6443 -u kubeadmin
+oc login "https://api.jtakvori-$instdir.devcluster.openshift.com:6443" -u kubeadmin
