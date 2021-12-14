@@ -74,6 +74,8 @@ if [ -f .lastdir ]; then
 			echo "./openshift-install --dir $lastdir destroy cluster && rm -rf $lastdir || rm -rf $lastdir"
 			sleep 5
 		fi
+	else
+		echo "Previous cluster seams to have been destroyed already. New cluster installation can go on."
 	fi
 	IFS='-'
 	parts=( $lastdir )
@@ -116,6 +118,7 @@ else
 	wl-copy < ../pull-secret.json
 	./openshift-install --dir "$instdir" create install-config
 	sed -i 's/OpenShiftSDN/OVNKubernetes/' "./$instdir/install-config.yaml"
+	cp "./$instdir/install-config.yaml" ./install-config.yaml.keep
 fi
 
 if [ "$prepare" == "1" ]; then
@@ -139,4 +142,4 @@ if [ $? -ne 0 ]; then
 		exit 1
 fi
 
-oc login "https://api.jtakvori-$instdir.devcluster.openshift.com:6443" -u kubeadmin
+oc login "https://api.jtakvori-${instdir}.devcluster.openshift.com:6443" -u kubeadmin
