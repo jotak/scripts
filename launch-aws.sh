@@ -128,6 +128,7 @@ fi
 
 if [ "$interactive" == "1" ]; then
 	vi "./$instdir/install-config.yaml"
+	cp "./$instdir/install-config.yaml" ./install-config.yaml.keep
 fi
 
 if [ "$prepare" == "1" ]; then
