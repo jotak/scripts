@@ -7,9 +7,10 @@ show_help()
 {
    echo "Start OpenShift on AWS. The script must run from an OpenShift directory (ie. with openshift-install)"
    echo
-   echo "Syntax: launch-aws [-s|p|d|c|h]"
+   echo "Syntax: launch-aws [-s|i|p|d|c|h]"
    echo "Options:"
    echo "s     Skip secrets verification."
+   echo "i     Interactive mode: start vi on config."
    echo "p     Prepare config without starting cluster."
    echo "d     Destroy last created cluster and exit."
    echo "c     Clean (destroy) last created cluster and continue."
@@ -20,11 +21,12 @@ show_help()
 # Reset in case getopts has been used previously in the shell.
 OPTIND=1
 check_secrets=1
+interactive=0
 prepare=0
 destroy=0
 exit_after_destroy=0
 
-while getopts "h?spdc" opt; do
+while getopts "h?sipdc" opt; do
   case "$opt" in
     h|\?)
       show_help
@@ -32,6 +34,9 @@ while getopts "h?spdc" opt; do
       ;;
     s)
 			check_secrets=0
+      ;;
+    i)
+			interactive=1
       ;;
     p)
 			prepare=1
@@ -75,7 +80,7 @@ if [ -f .lastdir ]; then
 			sleep 5
 		fi
 	else
-		echo "Previous cluster seams to have been destroyed already. New cluster installation can go on."
+		echo "Previous cluster seems to have been destroyed already. New cluster installation can go on."
 	fi
 	IFS='-'
 	parts=( $lastdir )
@@ -114,11 +119,15 @@ else
 	echo "Now going through interactive steps..."
 	echo "# key: use openshift-dev"
 	echo "# cluster name: jtakvori-$instdir"
-	echo "# Pull secret has been copied to clipboard, paste it when asked for it"
-	wl-copy < ../pull-secret.json
+	echo "# Pull secret has been copied to clipboard, paste it when asked for it (or run: jq -c < ../pull-secret.json)"
+	jq -c < ../pull-secret.json | wl-copy
 	./openshift-install --dir "$instdir" create install-config
 	sed -i 's/OpenShiftSDN/OVNKubernetes/' "./$instdir/install-config.yaml"
 	cp "./$instdir/install-config.yaml" ./install-config.yaml.keep
+fi
+
+if [ "$interactive" == "1" ]; then
+	vi "./$instdir/install-config.yaml"
 fi
 
 if [ "$prepare" == "1" ]; then
