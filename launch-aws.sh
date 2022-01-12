@@ -65,6 +65,15 @@ if [ ! -f openshift-install ]; then
 	exit 1
 fi
 
+warnings=()
+
+print_warnings()
+{
+	for warning in "${warnings[@]}"; do
+		echo "WARNING: $warning"
+	done
+}
+
 today=`LC_ALL=en_US.utf8 date +"%b%d" | awk '{print tolower($0)}'`
 inc=0
 
@@ -123,6 +132,12 @@ else
 	jq -c < ../pull-secret.json | wl-copy
 	./openshift-install --dir "$instdir" create install-config
 	sed -i 's/OpenShiftSDN/OVNKubernetes/' "./$instdir/install-config.yaml"
+	command -v yq &> /dev/null
+	if [ "$?" == "0" ]; then
+		yq e -i '.controlPlane.replicas = 1' "./$instdir/install-config.yaml"
+	else
+ 		warnings+=("yq not found, number of control plane replicas not decreased to 1. It can be downloaded at https://github.com/mikefarah/yq.")
+	fi
 	cp "./$instdir/install-config.yaml" ./install-config.yaml.keep
 fi
 
@@ -142,8 +157,11 @@ if [ "$prepare" == "1" ]; then
 	echo "To cancel, remove directory:"
 	echo "rm -rf $instdir"
 	echo ""
+	print_warnings
 	exit 0
 fi
+
+print_warnings
 
 ./openshift-install --dir "$instdir" create cluster
 
