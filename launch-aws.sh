@@ -170,4 +170,7 @@ if [ $? -ne 0 ]; then
 		exit 1
 fi
 
+echo "Login command:"
+
+set -x
 oc login "https://api.jtakvori-${instdir}.devcluster.openshift.com:6443" -u kubeadmin
