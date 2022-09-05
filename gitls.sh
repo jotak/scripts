@@ -37,7 +37,7 @@ for k in `git branch $BR_OPTS | sed s/^..// | sed s/-\>.*//`
 do
 	CHECK_MASTER=""
 	DESC=`git log -1 --pretty=format:"%s" $k`
-	ok=`git log --pretty=oneline --abbrev-commit master | grep "$DESC"`
+	ok=`git log --pretty=oneline --abbrev-commit main | grep "$DESC"`
 	if [[ "$ok" == "" ]]; then
 		CHECK_MASTER=" *"
 	fi

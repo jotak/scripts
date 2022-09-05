@@ -52,7 +52,7 @@ if [ $? -ne 0 ]; then
 fi
 
 echo "Making sure secrets are valid..."
-/work/scripts/podman-check-auth.sh ../pull-secret.json
+/w/scripts/podman-check-auth.sh ../pull-secret.json
 
 if [ $? -ne 0 ]; then
 		echo "Please update secrets"
