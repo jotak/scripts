@@ -2,19 +2,25 @@
 
 if [[ "$#" -lt 2 || "$1" == "--help" || "$2" == "--help" ]]; then
   echo ""
-	echo "Syntax: $0 <source file> <c|u|p|a|d>"
+	echo "Syntax: $0 <source file> <c|u|p|a|g|e|d>"
   echo ""
   echo "c: create new file"
   echo "u: update last generated file"
   echo "p: prepare without kube-apply"
   echo "a: kube-apply without any change"
+  echo "g: get deployed resource"
+  echo "e: edit deployed resource"
   echo "d: delete resource"
   exit 0
 fi
 
+needvim=false
 prepare=false
 create=false
+create=false
 apply=false
+get=false
+edit=false
 delete=false
 source=""
 
@@ -28,6 +34,10 @@ do
 		prepare=true
 	elif [[ "$arg" == "a" ]]; then
 		apply=true
+	elif [[ "$arg" == "g" ]]; then
+		get=true
+	elif [[ "$arg" == "e" ]]; then
+		edit=true
 	elif [[ "$arg" == "d" ]]; then
 		delete=true
 	else
@@ -35,8 +45,15 @@ do
 	fi
 done
 
+if [[ "$get" == "true" ]]; then
+  kubectl get -f $source
+fi
+
 if [[ "$delete" == "true" ]]; then
   kubectl delete -f $source
+fi
+
+if [[ "$create" == "false" && "$apply" == "false" && "$prepare" == "false" && "$edit" == "false" ]]; then
   exit 0
 fi
 
