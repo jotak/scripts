@@ -132,12 +132,6 @@ else
 	jq -c < ../pull-secret.json | wl-copy
 	./openshift-install --dir "$instdir" create install-config
 	sed -i 's/OpenShiftSDN/OVNKubernetes/' "./$instdir/install-config.yaml"
-	command -v yq &> /dev/null
-	if [ "$?" == "0" ]; then
-		yq e -i '.controlPlane.replicas = 1' "./$instdir/install-config.yaml"
-	else
- 		warnings+=("yq not found, number of control plane replicas not decreased to 1. It can be downloaded at https://github.com/mikefarah/yq.")
-	fi
 	cp "./$instdir/install-config.yaml" ./install-config.yaml.keep
 fi
 
