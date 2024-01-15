@@ -164,6 +164,7 @@ if [ $? -ne 0 ]; then
 		exit 1
 fi
 
+mv ~/.kube/config ~/.kube/config-old
 echo "Login command:"
 
 set -x
