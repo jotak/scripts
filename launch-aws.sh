@@ -158,6 +158,7 @@ fi
 print_warnings
 
 ./openshift-install --dir "$instdir" create cluster
+printf \\a
 
 if [ $? -ne 0 ]; then
     echo "Installation failed 😖"
